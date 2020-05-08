@@ -17,7 +17,7 @@ class Content:
     def look_for(self, board, distance: int = 1):
         return board.adjacent_cells(self.pos, distance)
 
-    def __look_for_empty_cells(self, board, distance: int = 1):
+    def look_for_empty_cells(self, board, distance: int = 1):
         options = []
         for cell in board.adjacent_cells(self.pos, distance):
             if cell.empty():

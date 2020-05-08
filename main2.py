@@ -112,5 +112,5 @@ while True:
     step()
     if not paused:
         count += 1
-    clock.tick(1)
+    clock.tick(120)
     pygame.display.flip()

@@ -33,8 +33,6 @@ class Herbivorous(Animal):
             self.move_to(pos, board)
             return
         if self.race == cell.content.race and self.gender != cell.content.gender:
-            print(str(self))
-            print(str(cell.content))
             if self.gender == Genders.FEMALE.value:
                 self.reproduce(cell.content, board)
             else:
@@ -89,14 +87,15 @@ class Herbivorous(Animal):
                     self.move_to(opponent.pos, board)
 
     def reproduce(self, other, board):
-        data = super.reproduce(other, board)
-
-        data.empty_cell.occupy(Herbivorous(
-            data.empty_cell.pos, data.size, None, data.father.race, color))
+        data = super().reproduce(other, board)
+        if not data:
+            return
+        data["empty_cell"].occupy(Herbivorous(
+            data["empty_cell"].pos, data["size"], None, data["father"].race, data["color"]))
 
         if self.debug:
-            print('New ' + data.father.race.capitalize() +
-                  ' born: ' + str(data.empty_cell.content))
+            print('New ' + data["father"].race.capitalize() +
+                  ' born: ' + str(data["empty_cell"].content))
         # if father.content_type == 'carnivorous':
         #     return Carnivorous(pos, size, None, father.race, color)
         # if father.content_type == 'herbivorous':

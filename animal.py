@@ -9,7 +9,7 @@ from races import Races
 
 
 class Animal(Content):
-    mutation_probability = 1
+    mutation_probability = 50
     mutation_factor = 0.5
 
     def __init__(self, pos: int, content_type: str = None, color: list = None, size: int = None, gender: int = None, race: str = None):
@@ -156,7 +156,7 @@ class Animal(Content):
             return False
         if self.gender == other.gender:
             raise Exception('Can not copulate animals with same gender')
-        empty_cells = self.__look_for_empty_cells(board)
+        empty_cells = self.look_for_empty_cells(board)
         if empty_cells is None or not empty_cells:
             if self.debug:
                 print(self.race.capitalize() +
@@ -167,6 +167,7 @@ class Animal(Content):
         mother = self if self.gender == Genders.FEMALE else other
 
         if random.randint(1, 100) <= self.mutation_probability:
+            print('New mutation!!!')
             color = Colors.melt(Colors, Colors.random(Colors), mother.color)
             size = (father.size + mother.size)/4 * \
                 random.uniform(self.mutation_factor, 1 + self.mutation_factor)
@@ -278,7 +279,7 @@ class Animal(Content):
         return power
 
     def flee(self, board):
-        posible_scape = random.shuffle(self.__look_for_empty_cells(board))
+        posible_scape = random.shuffle(self.look_for_empty_cells(board))
         if posible_scape is None or not posible_scape[0]:
             if self.debug:
                 print('Content can not flee: ' + str(self))
