@@ -7,10 +7,11 @@ from colors import Colors
 
 class Board:
 
-    FLOOR = Colors.BLACK.value
-    GRID = Colors.WHITE.value
+    FLOOR = Colors.WHITE.value
+    GRID = Colors.BLACK.value
 
-    def __init__(self, cols: int, rows: int, block_width: int, block_height: int):
+    def __init__(self, cols: int, rows: int, block_width: int, block_height: int, visual: bool = True):
+        self.visual = visual
         self.cols = cols
         self.rows = rows
         self.margin_vertical = 50  # margin_vertical
@@ -31,6 +32,8 @@ class Board:
                 self.cells[pos] = Cell(pos, x, y)
 
     def draw_grid(self):
+        if not self.visual:
+            return
         for i in range(self.cols):
             start_point = (i * self.block_width, 0)
             end_point = (i * self.block_width, self.size[1])
@@ -78,7 +81,7 @@ class Board:
             for y in range(pos - (self.cols*(distance-width))-distance, pos - (self.cols*(distance-width)) +
                            distance+1):
                 # print('y: ' + str(y))
-                if y >= 0 and y < len(self.cells):
+                if y >= 0 and y < len(self.cells) and y != pos:
                     line.append(y)
             matrix += line
         return matrix
@@ -98,6 +101,8 @@ class Board:
         print(self.adjacent_positions(pos, dist))
 
     def erase(self):
+        if not self.visual:
+            return
         self.screen.fill(self.FLOOR)
 
     def debug(self):

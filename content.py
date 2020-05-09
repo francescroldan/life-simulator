@@ -1,11 +1,11 @@
 import pygame
 import random
 import operator
+import os.path
 from enum import Enum
 from colors import Colors
 from sizes import Sizes
 from genders import Genders
-from races import Races
 
 
 class Content:
@@ -30,22 +30,49 @@ class Content:
         return [x, y]
 
     def draw(self, board):
+        if not board.visual:
+            return
+        blank_space = 2
         x, y = self.coordinates(board)
-        size = 1+int((board.block_width - 1)*self.size/100)
+        size = int((board.block_width - blank_space*2)*self.size/100)
+
         content = pygame.Rect(
-            [x+(board.block_width-size)/2, y+(board.block_height-size)/2, size, size])
+            [x + (board.block_width-size)/2, y + (board.block_height-size)/2, size, size])
         pygame.draw.rect(board.screen, self.color, content)
         pygame.display.update()
 
-    def erase(self, board):
+    def draw_image(self, board):
+        if not board.visual:
+            return
+        self.image = 'images/' + self.race + '.png'
+        if not os.path.isfile(self.image):
+            print(self.image)
+            self.image = 'images/gol_icon.png'
+        blank_space = 2
         x, y = self.coordinates(board)
-        size = 1+int((board.block_width - 1)*self.size/100)
+        size = int((board.block_width - blank_space*2)*self.size/100)
+
+        picture = pygame.image.load(self.image)
+        picture = pygame.transform.scale(picture, (size, size))
+        rect = picture.get_rect()
+        rect = rect.move((x + (board.block_width-size)/2, y +
+                          (board.block_height-size)/2))
+        board.screen.blit(picture, rect)
+
+    def erase(self, board):
+        if not board.visual:
+            return
+        blank_space = 2
+        x, y = self.coordinates(board)
+        size = int((board.block_width - blank_space*2)*self.size/100)
         content = pygame.Rect(
-            [x+(board.block_width-size)/2, y+(board.block_height-size)/2, size, size])
+            [x + (board.block_width-size)/2, y + (board.block_height-size)/2, size, size])
         pygame.draw.rect(board.screen, board.FLOOR, content)
         pygame.display.update()
 
     def draw_debug_text(self, board, text: str):
+        if board.visual:
+            return
         x, y = self.coordinates(board)
         font = pygame.font.SysFont('verdana', 11)
         text = font.render(text, True, (255, 255, 255))

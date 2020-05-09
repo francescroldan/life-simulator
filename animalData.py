@@ -2,100 +2,148 @@ import random
 from enum import Enum
 from colors import Colors
 from sizes import Sizes
-from races import Races
+from feedings import Feedings
 
 
 class AnimalData(Enum):
-    FOCA = ('carnivorous', 'Foca', Sizes.M.value, Colors.RED.value)
-    HIENA = ('carnivorous', 'Hiena', Sizes.S.value, Colors.RED.value)
-    LINCE = ('carnivorous', 'Lince', Sizes.S.value, Colors.RED.value)
-    GATO = ('carnivorous', 'Gato', Sizes.XS.value, Colors.RED.value)
-    JAGUAR = ('carnivorous', 'Jaguar', Sizes.M.value, Colors.RED.value)
-    LOBO = ('carnivorous', 'Lobo', Sizes.S.value, Colors.RED.value)
-    GATO_MONTÉS = ('carnivorous', 'Gato montés',
-                   Sizes.L.value, Colors.RED.value)
-    LOBO_GRIS = ('carnivorous', 'Lobo gris', Sizes.S.value, Colors.RED.value)
-    COMADREJA = ('carnivorous', 'Comadreja', Sizes.XS.value, Colors.RED.value)
-    LEÓN = ('carnivorous', 'León', Sizes.M.value, Colors.RED.value)
-    MARINO = ('carnivorous', 'marino', Sizes.S.value, Colors.RED.value)
-    CIVETA = ('carnivorous', 'Civeta', Sizes.XS.value, Colors.RED.value)
-    COYOTE = ('carnivorous', 'Coyote', Sizes.XS.value, Colors.RED.value)
-    LEOPARDO = ('carnivorous', 'Leopardo', Sizes.S.value, Colors.RED.value)
-    MANGOSTA = ('carnivorous', 'Mangosta', Sizes.XS.value, Colors.RED.value)
-    MARTA = ('carnivorous', 'Marta', Sizes.XS.value, Colors.RED.value)
-    TIGRE_SIBERIANO = ('carnivorous', 'Tigre siberiano',
-                       Sizes.M.value, Colors.RED.value)
-    TIGRE_DE_BENGALA = ('carnivorous', 'Tigre de bengala',
-                        Sizes.M.value, Colors.RED.value)
-    OSO_POLAR = ('carnivorous', 'Oso polar', Sizes.L.value, Colors.RED.value)
-    NUTRIA = ('carnivorous', 'Nutria', Sizes.XS.value, Colors.RED.value)
-    GUEPARDO = ('carnivorous', 'Guepardo', Sizes.M.value, Colors.RED.value)
-    GINETA_MANCHADA = ('carnivorous', 'Gineta manchada',
-                       Sizes.XS.value, Colors.RED.value)
-    PUMA = ('carnivorous', 'Puma', Sizes.S.value, Colors.RED.value)
-    PANDA_ROJO = ('carnivorous', 'Panda rojo',
+    SEAL = (Feedings.CARNIVOROUS.value, 'seal',
+            Sizes.M.value, Colors.RED.value)
+    HYENA = (Feedings.CARNIVOROUS.value, 'hyena',
+             Sizes.S.value, Colors.RED.value)
+    LYNX = (Feedings.CARNIVOROUS.value, 'lynx',
+            Sizes.S.value, Colors.RED.value)
+    CAT = (Feedings.CARNIVOROUS.value, 'cat',
+           Sizes.XS.value, Colors.RED.value)
+    JAGUAR = (Feedings.CARNIVOROUS.value, 'jaguar',
+              Sizes.M.value, Colors.RED.value)
+    WOLF = (Feedings.CARNIVOROUS.value, 'wolf',
+            Sizes.S.value, Colors.RED.value)
+    WILDCAT = (Feedings.CARNIVOROUS.value, 'wildcat',
+               Sizes.L.value, Colors.RED.value)
+    GREY_WOLF = (Feedings.CARNIVOROUS.value, 'grey_wolf',
+                 Sizes.S.value, Colors.RED.value)
+    WEASEL = (Feedings.CARNIVOROUS.value, 'weasel',
+              Sizes.XS.value, Colors.RED.value)
+    SEALION = (Feedings.CARNIVOROUS.value, 'sealion',
+               Sizes.M.value, Colors.RED.value)
+    CIVET = (Feedings.CARNIVOROUS.value, 'civet',
+             Sizes.XS.value, Colors.RED.value)
+    COYOTE = (Feedings.CARNIVOROUS.value, 'coyote',
+              Sizes.XS.value, Colors.RED.value)
+    LEOPARD = (Feedings.CARNIVOROUS.value, 'leopard',
+               Sizes.S.value, Colors.RED.value)
+    MONGOOSE = (Feedings.CARNIVOROUS.value, 'mongoose',
+                Sizes.XS.value, Colors.RED.value)
+    MARTHA = (Feedings.CARNIVOROUS.value, 'martha',
+              Sizes.XS.value, Colors.RED.value)
+    SIBERIAN_TIGER = (Feedings.CARNIVOROUS.value, 'siberian_tiger',
+                      Sizes.M.value, Colors.RED.value)
+    BENGAL_TIGER = (Feedings.CARNIVOROUS.value, 'bengal_tiger',
+                    Sizes.M.value, Colors.RED.value)
+    POLAR_BEAR = (Feedings.CARNIVOROUS.value, 'polar_bear',
+                  Sizes.L.value, Colors.RED.value)
+    OTTER = (Feedings.CARNIVOROUS.value, 'otter',
+             Sizes.XS.value, Colors.RED.value)
+    CHEETAH = (Feedings.CARNIVOROUS.value, 'cheetah',
+               Sizes.M.value, Colors.RED.value)
+    SPOTTED_GIN = (Feedings.CARNIVOROUS.value, 'spotted_gin',
+                   Sizes.XS.value, Colors.RED.value)
+    RED_PANDA = (Feedings.CARNIVOROUS.value, 'red_panda',
+                 Sizes.XS.value, Colors.RED.value)
+    COUGAR = (Feedings.CARNIVOROUS.value, 'cougar',
+              Sizes.M.value, Colors.RED.value)
+    COMMON_GIN = (Feedings.CARNIVOROUS.value, 'common_gin',
                   Sizes.XS.value, Colors.RED.value)
-    PANTERA = ('carnivorous', 'Pantera', Sizes.M.value, Colors.RED.value)
-    NEGRA = ('carnivorous', 'negra', Sizes.S.value, Colors.RED.value)
-    GINETA_COMÚN = ('carnivorous', 'Gineta común',
-                    Sizes.XS.value, Colors.RED.value)
-    LINSANGS = ('carnivorous', 'Linsangs', Sizes.XS.value, Colors.RED.value)
-    FOSA = ('carnivorous', 'Fosa', Sizes.XS.value, Colors.RED.value)
-    MURCIÉLAGO_ESPECTRAL = ('carnivorous', 'Murciélago espectral',
-                            Sizes.SMALLEST.value, Colors.RED.value)
-    MAPACHE = ('carnivorous', 'Mapache', Sizes.XS.value, Colors.RED.value)
-    VISÓN_EUROPEO = ('carnivorous', 'Visón europeo',
+    LINSANGS = (Feedings.CARNIVOROUS.value, 'linsangs',
+                Sizes.XS.value, Colors.RED.value)
+    PIT = (Feedings.CARNIVOROUS.value, 'pit',
+           Sizes.XS.value, Colors.RED.value)
+    BAT = (Feedings.CARNIVOROUS.value, 'bat',
+           Sizes.SMALLEST.value, Colors.RED.value)
+    RACCOON = (Feedings.CARNIVOROUS.value, 'raccoon',
+               Sizes.XS.value, Colors.RED.value)
+    EUROPEAN_MINK = (Feedings.CARNIVOROUS.value, 'european_mink',
                      Sizes.XS.value, Colors.RED.value)
-    MURCIÉLAGO_PESCADOR = ('carnivorous', 'Murciélago pescador',
-                           Sizes.SMALLEST.value, Colors.RED.value)
-    DEMONIO_DE_TASMANIA = ('carnivorous', 'Demonio de Tasmania',
-                           Sizes.XS.value, Colors.RED.value)
-    MORSA = ('carnivorous', 'Morsa', Sizes.XL.value, Colors.RED.value)
-    CHACAL = ('carnivorous', 'Chacal', Sizes.XS.value, Colors.RED.value)
-    PANGOLÍN = ('carnivorous', 'Pangolín', Sizes.XS.value, Colors.RED.value)
-    HURÓN = ('carnivorous', 'Hurón', Sizes.XS.value, Colors.RED.value)
-    GLOTÓN = ('carnivorous', 'Glotón', Sizes.XS.value, Colors.RED.value)
-    TEJÓN = ('carnivorous', 'Tejón', Sizes.XS.value, Colors.RED.value)
+    FISHER_BAT = (Feedings.CARNIVOROUS.value, 'fisher_bat',
+                  Sizes.SMALLEST.value, Colors.RED.value)
+    TASMANIAN_DEVIL = (Feedings.CARNIVOROUS.value, 'tasmanian_devil',
+                       Sizes.XS.value, Colors.RED.value)
+    WALRUS = (Feedings.CARNIVOROUS.value, 'walrus',
+              Sizes.XL.value, Colors.RED.value)
+    JACKAL = (Feedings.CARNIVOROUS.value, 'jackal',
+              Sizes.XS.value, Colors.RED.value)
+    PANGOLIN = (Feedings.CARNIVOROUS.value, 'pangolin',
+                Sizes.XS.value, Colors.RED.value)
+    FERRET = (Feedings.CARNIVOROUS.value, 'ferret',
+              Sizes.XS.value, Colors.RED.value)
+    GLUTTON = (Feedings.CARNIVOROUS.value, 'glutton',
+               Sizes.XS.value, Colors.RED.value)
+    BADGER = (Feedings.CARNIVOROUS.value, 'badger',
+              Sizes.XS.value, Colors.RED.value)
 
-    CABALLO = ('herbivorous', 'caballo', Sizes.L.value, Colors.GREEN.value)
-    CABRA = ('herbivorous', 'cabra', Sizes.S.value, Colors.GREEN.value)
-    CANGURO = ('herbivorous', 'canguro', Sizes.M.value, Colors.GREEN.value)
-    CEBRA = ('herbivorous', 'cebra', Sizes.L.value, Colors.GREEN.value)
-    CIERVO = ('herbivorous', 'ciervo', Sizes.M.value, Colors.GREEN.value)
-    CONEJO = ('herbivorous', 'conejo',
+    HORSE = (Feedings.HERBIVOROUS.value, 'horse',
+             Sizes.L.value, Colors.GREEN.value)
+    GOAT = (Feedings.HERBIVOROUS.value, 'goat',
+            Sizes.S.value, Colors.GREEN.value)
+    KANGAROO = (Feedings.HERBIVOROUS.value, 'kangaroo',
+                Sizes.M.value, Colors.GREEN.value)
+    ZEBRA = (Feedings.HERBIVOROUS.value, 'zebra',
+             Sizes.L.value, Colors.GREEN.value)
+    DEER = (Feedings.HERBIVOROUS.value, 'deer',
+            Sizes.M.value, Colors.GREEN.value)
+    RABBIT = (Feedings.HERBIVOROUS.value, 'rabbit',
               Sizes.SMALLEST.value, Colors.GREEN.value)
-    CHINCHILLA = ('herbivorous', 'chinchilla',
+    CHINCHILLA = (Feedings.HERBIVOROUS.value, 'chinchilla',
                   Sizes.SMALLEST.value, Colors.GREEN.value)
-    ELEFANTE = ('herbivorous', 'elefante',
+    ELEPHANT = (Feedings.HERBIVOROUS.value, 'elephant',
                 Sizes.BIGGEST.value, Colors.GREEN.value)
-    GACELA = ('herbivorous', 'gacela', Sizes.M.value, Colors.GREEN.value)
-    JIRAFA = ('herbivorous', 'jirafa', Sizes.BIGGEST.value, Colors.GREEN.value)
-    KOALA = ('herbivorous', 'koala', Sizes.XS.value, Colors.GREEN.value)
-    ORUGA = ('herbivorous', 'oruga', Sizes.SMALLEST.value, Colors.GREEN.value)
-    OSO_PANDA = ('herbivorous', 'oso panda',
-                 Sizes.XL.value, Colors.GREEN.value)
-    OVEJA = ('herbivorous', 'oveja', Sizes.S.value, Colors.GREEN.value)
-    RINOCERONTE = ('herbivorous', 'rinoceronte',
-                   Sizes.BIGGEST.value, Colors.GREEN.value)
-    TORTUGA_DE_TIERRA = ('herbivorous', 'tortuga de tierra',
-                         Sizes.XS.value, Colors.GREEN.value)
-    VACA = ('herbivorous', 'vaca', Sizes.XL.value, Colors.GREEN.value)
+    GAZELLE = (Feedings.HERBIVOROUS.value, 'gazelle',
+               Sizes.M.value, Colors.GREEN.value)
+    GIRAFFE = (Feedings.HERBIVOROUS.value, 'giraffe',
+               Sizes.BIGGEST.value, Colors.GREEN.value)
+    KOALA = (Feedings.HERBIVOROUS.value, 'koala',
+             Sizes.XS.value, Colors.GREEN.value)
+    CATERPILLAR = (Feedings.HERBIVOROUS.value, 'caterpillar',
+                   Sizes.SMALLEST.value, Colors.GREEN.value)
+    PANDA_BEAR = (Feedings.HERBIVOROUS.value, 'panda_bear',
+                  Sizes.L.value, Colors.GREEN.value)
+    SHEEP = (Feedings.HERBIVOROUS.value, 'sheep',
+             Sizes.S.value, Colors.GREEN.value)
+    RHINO = (Feedings.HERBIVOROUS.value, 'rhino',
+             Sizes.BIGGEST.value, Colors.GREEN.value)
+    LAND_TURTLE = (Feedings.HERBIVOROUS.value, 'land_turtle',
+                   Sizes.XS.value, Colors.GREEN.value)
+    COW = (Feedings.HERBIVOROUS.value, 'cow',
+           Sizes.L.value, Colors.GREEN.value)
 
-    PERRO = ('omnivorous', 'Perro', Sizes.S.value, Colors.RED.value)
-    OSO_PARDO = ('omnivorous', 'Oso pardo', Sizes.L.value, Colors.RED.value)
-    AVESTRUZ = ('omnivorous', 'avestruz', Sizes.M.value, Colors.BLUE.value)
-    CERDO = ('omnivorous', 'cerdo', Sizes.M.value, Colors.BLUE.value)
-    CHIMPANCÉ = ('omnivorous', 'chimpancé', Sizes.S.value, Colors.BLUE.value)
-    COATÍ = ('omnivorous', 'coatí', Sizes.XS.value, Colors.BLUE.value)
-    CUERVO = ('omnivorous', 'cuervo', Sizes.SMALLEST.value, Colors.BLUE.value)
-    ERIZO = ('omnivorous', 'erizo', Sizes.SMALLEST.value, Colors.BLUE.value)
-    GALLINA = ('omnivorous', 'gallina', Sizes.XS.value, Colors.BLUE.value)
-    ÑANDÚ = ('omnivorous', 'ñandú', Sizes.S.value, Colors.BLUE.value)
-    OSO = ('omnivorous', 'oso', Sizes.L.value, Colors.BLUE.value)
-    RATON = ('omnivorous', 'raton', Sizes.SMALLEST.value, Colors.BLUE.value)
-    TORTUGA_MARINA = ('omnivorous', 'tortuga marina',
-                      Sizes.M.value, Colors.BLUE.value)
-    URRACA = ('omnivorous', 'urraca', Sizes.SMALLEST.value, Colors.BLUE.value)
+    DOG = (Feedings.OMNIVOROUS.value, 'dog',
+           Sizes.S.value, Colors.RED.value)
+    GRIZZLY = (Feedings.OMNIVOROUS.value, 'grizzly',
+               Sizes.L.value, Colors.RED.value)
+    OSTRICH = (Feedings.OMNIVOROUS.value, 'ostrich',
+               Sizes.M.value, Colors.BLUE.value)
+    PIG = (Feedings.OMNIVOROUS.value, 'pig',
+           Sizes.M.value, Colors.BLUE.value)
+    CHIMPANZEE = (Feedings.OMNIVOROUS.value, 'chimpanzee',
+                  Sizes.S.value, Colors.BLUE.value)
+    COATI = (Feedings.OMNIVOROUS.value, 'coati',
+             Sizes.XS.value, Colors.BLUE.value)
+    CROW = (Feedings.OMNIVOROUS.value, 'crow',
+            Sizes.SMALLEST.value, Colors.BLUE.value)
+    HEDGEHOG = (Feedings.OMNIVOROUS.value, 'hedgehog',
+                Sizes.SMALLEST.value, Colors.BLUE.value)
+    HEN = (Feedings.OMNIVOROUS.value, 'hen',
+           Sizes.XS.value, Colors.BLUE.value)
+    RHEA = (Feedings.OMNIVOROUS.value, 'rhea',
+            Sizes.S.value, Colors.BLUE.value)
+    BEAR = (Feedings.OMNIVOROUS.value, 'bear',
+            Sizes.L.value, Colors.BLUE.value)
+    MOUSE = (Feedings.OMNIVOROUS.value, 'mouse',
+             Sizes.SMALLEST.value, Colors.BLUE.value)
+    SEA_TURTLE = (Feedings.OMNIVOROUS.value, 'sea_turtle',
+                  Sizes.M.value, Colors.BLUE.value)
+    MAGPIE = (Feedings.OMNIVOROUS.value, 'magpie',
+              Sizes.SMALLEST.value, Colors.BLUE.value)
 
     def random_existing(self):
         animal_base = random.choice(list(AnimalData)).value
@@ -108,5 +156,3 @@ class AnimalData(Enum):
             if animal.value[1] == name:
                 return animal.value
         raise ValueError('{} is not a valid animal name'.format(name))
-
-        return

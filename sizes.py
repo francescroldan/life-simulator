@@ -18,12 +18,10 @@ class Sizes(Enum):
         return (random.randint(Sizes.SMALLEST.value, Sizes.BIGGEST.value))
 
     def random_between(self, minium: int, maxium: int):
-        # print(str(minium) + ' <-> ' + str(maxium))
         if minium is None or minium < Sizes.SMALLEST.value:
             minium = Sizes.SMALLEST.value
         if maxium is None or maxium > Sizes.BIGGEST.value:
             maxium = Sizes.BIGGEST.value
-        # print('Normalized: ' + str(minium) + ' <-> ' + str(maxium))
         return (random.randint(minium, maxium))
 
     def __ge__(self, other):

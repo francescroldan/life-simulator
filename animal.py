@@ -2,87 +2,57 @@ import pygame
 import random
 import operator
 from content import Content
+from typing import Type
 from colors import Colors
 from sizes import Sizes
 from genders import Genders
-from races import Races
+from feedings import Feedings
 
 
 class Animal(Content):
-    mutation_probability = 50
-    mutation_factor = 0.5
+    mutation_probability = 10
+    mutation_factor = 0.2
 
-    def __init__(self, pos: int, content_type: str = None, color: list = None, size: int = None, gender: int = None, race: str = None):
+    def __init__(self, pos: int, content_type: str, race: str, color: list, size: int, gender: int, father: Type[Content] = None, mother: Type[Content] = None):
         self.debug = not True
         self.pos = pos
         self.content_type = content_type
+        self.race = race
+        self.gender = gender
+        self.color = color
+        self.size = size
+        self.father = father
+        self.mother = mother
 
         self.base_actions = 1
         self.actions = self.base_actions
 
-        if self.content_type is None:
-            self.content_type = random.choice(list(['carnivorous',
-                                                    'herbivorous',
-                                                    'omnivorous']))
-
-        # change this to custom inherited classes
-        self.race = race
-        if self.race is None:
-            self.race = Races.random_by_feeds(Races, self.content_type)
-
-        self.gender = gender
-        if self.gender is None:
-            self.gender = Genders.random(Genders)
-
-        self.color = color
-        if self.color is None:
-            if self.content_type == 'carnivorous':
-                self.color = Colors.RED.value
-            elif self.content_type == 'herbivorous':
-                self.color = Colors.GREEN.value
-            elif self.content_type == 'omnivorous':
-                self.color = Colors.BLUE.value
-
-        self.size = size
-        if self.size is None:
-            if self.content_type == 'carnivorous':
-                self.size = Sizes.random_between(
-                    Sizes, Sizes.XS.value, Sizes.L.value)
-            elif self.content_type == 'herbivorous':
-                self.size = Sizes.random_between(
-                    Sizes, Sizes.S.value, Sizes.XL.value)
-            elif self.content_type == 'omnivorous':
-                self.size = Sizes.random_between(
-                    Sizes, Sizes.XS.value, Sizes.L.value)
-            else:
-                self.size = Sizes.random_existing(Sizes)
-
         self.base_life = self.size*10
-        self.grow_counter = 1
         self.life = self.base_life
+        self.grow_counter = 1
 
     def reset_actions(self):
         self.actions = self.base_actions
 
     def action(self, board):
-        self.erase(board)
         found = self.look_for(board)
         if len(found) > 0:
             evaluated_options = self.evaluate(found)
             best_option = list(evaluated_options.keys())[0]
             self.execute(best_option, board)
             self.actions -= 1
-        self.draw(board)
+        self.erase(board)
+        self.draw_image(board)
 
     def evaluate(self, options: list):
         evaluation = {}
         for option in options:
             if option.empty():
-                if self.content_type == 'carnivorous':
+                if self.content_type == Feedings.CARNIVOROUS.value:
                     score = random.randint(0, 15)
-                elif self.content_type == 'herbivorous':
+                elif self.content_type == Feedings.HERBIVOROUS.value:
                     score = random.randint(15, 50)
-                elif self.content_type == 'omnivorous':
+                elif self.content_type == Feedings.OMNIVOROUS.value:
                     score = random.randint(5, 25)
                 else:
                     score = random.randint(0, 100)
@@ -91,25 +61,25 @@ class Animal(Content):
                 option_content = option.content
                 option_type = option_content.content_type
                 # change this to custom inherited classes
-                if self.content_type == 'carnivorous':
-                    if option_type == 'carnivorous' or option_type == 'omnivorous':
+                if self.content_type == Feedings.CARNIVOROUS.value:
+                    if option_type == Feedings.CARNIVOROUS.value or option_type == Feedings.OMNIVOROUS.value:
                         score = random.randint(
                             0, max(0, int(self.size-option_content.size+5)))
-                    elif option_type == 'herbivorous':
+                    elif option_type == Feedings.HERBIVOROUS.value:
                         score = random.randint(
                             10, 10 + max(0, int(self.size-option_content.size+30)))
-                elif self.content_type == 'herbivorous':
-                    if option_type == 'carnivorous' or option_type == 'omnivorous':
+                elif self.content_type == Feedings.HERBIVOROUS.value:
+                    if option_type == Feedings.CARNIVOROUS.value or option_type == Feedings.OMNIVOROUS.value:
                         score = random.randint(
                             0, max(0, int(self.size-option_content.size-30)))
-                    elif option_type == 'herbivorous':
+                    elif option_type == Feedings.HERBIVOROUS.value:
                         score = random.randint(
                             0, max(0, int(self.size-option_content.size-20)))
-                elif self.content_type == 'omnivorous':
-                    if option_type == 'carnivorous' or option_type == 'omnivorous':
+                elif self.content_type == Feedings.OMNIVOROUS.value:
+                    if option_type == Feedings.CARNIVOROUS.value or option_type == Feedings.OMNIVOROUS.value:
                         score = random.randint(
                             0, max(0, int(self.size-option_content.size-15)))
-                    elif option_type == 'herbivorous':
+                    elif option_type == Feedings.HERBIVOROUS.value:
                         score = random.randint(
                             5, 5 + max(0, int(self.size-option_content.size-5)))
                 else:
@@ -145,7 +115,7 @@ class Animal(Content):
 
     def reproduce(self, other, board):
         if self.debug:
-            print(str(self) + ' copulates with ' + str(other))
+            print('==>' + str(self) + ' copulates with ' + str(other))
         if self.actions < 1:
             if self.debug:
                 print(str(self) + ' is exausted and can not repreduce')
@@ -154,8 +124,11 @@ class Animal(Content):
             if self.debug:
                 print(str(other) + ' is exausted and can not repreduce')
             return False
-        if self.gender == other.gender:
+        if self.gender is other.gender:
+            print(str(self))
+            print(str(other))
             raise Exception('Can not copulate animals with same gender')
+
         empty_cells = self.look_for_empty_cells(board)
         if empty_cells is None or not empty_cells:
             if self.debug:
@@ -163,28 +136,37 @@ class Animal(Content):
                       ' has not empty location to reproduce: ' + str(self))
             return False
 
-        father = self if self.gender == Genders.MALE else other
-        mother = self if self.gender == Genders.FEMALE else other
+        father = self if self.gender is Genders.MALE.value else other
+        mother = self if self.gender is Genders.FEMALE.value else other
 
         if random.randint(1, 100) <= self.mutation_probability:
-            print('New mutation!!!')
-            color = Colors.melt(Colors, Colors.random(Colors), mother.color)
-            size = (father.size + mother.size)/4 * \
-                random.uniform(self.mutation_factor, 1 + self.mutation_factor)
+            if self.debug:
+                print(str(other) + ' mutation')
+            color = Colors.melt(Colors, Colors.random(
+                Colors), Colors.melt(Colors, father.color, mother.color))
+            size = int((father.size + mother.size)/3 *
+                       random.uniform(self.mutation_factor, 1 + self.mutation_factor))
         else:
             color = Colors.melt(Colors, father.color, mother.color)
-            size = (father.size + mother.size)/4
-
+            size = int((father.size + mother.size)/3 *
+                       random.uniform(1.1, 1.5))
+        # FIXME
+        size = min(100, max(1, size))
+        print('Father ' + str(father.race) + ' size: ' + str(father.size) + ' mother ' + str(mother.race) + ' size: ' +
+              str(mother.size), ' Child size: ' + str(size))
         self.actions -= 1
         other.actions -= 1
 
         return {'empty_cell': empty_cells[random.randint(0, len(empty_cells)-1)], 'father': father, 'mother': mother, 'color': color, 'size': size}
 
+    def sibling(self, other):
+        return True if isinstance(self.father, Animal) and isinstance(self.mother, Animal) and isinstance(other.father, Animal) and isinstance(other.mother, Animal) and self.father is other.father and self.mother is other.mother else False
+
     def grow_up(self):
         self.grow_counter += 1
         if self.grow_counter >= 10:
-            increase = self.size*random.uniform(0.01, 0.15)
-            self.size = min(100, int(increase))
+            increase = round(self.size*random.uniform(0.01, 0.15), 0)
+            self.size = min(100, increase)
             self.grow_counter = 0
         if self.debug:
             print(str(self) + ' eats ' + str(increase))
@@ -193,8 +175,8 @@ class Animal(Content):
         # change this to custom inherited classes
         if self.debug:
             print(str(self) + ' fights with ' + str(opponent))
-        if self.content_type == 'carnivorous':
-            if opponent.content_type == 'carnivorous' or opponent.content_type == 'omnivorous':
+        if self.content_type == Feedings.CARNIVOROUS.value:
+            if opponent.content_type == Feedings.CARNIVOROUS.value or opponent.content_type == Feedings.OMNIVOROUS.value:
                 if self.attack() < opponent.attack():
                     if self.debug:
                         print('Defender wins! '+str(self) + ' dies!')
@@ -205,7 +187,7 @@ class Animal(Content):
                     opponent.die(board)
                     self.move_to(opponent.pos, board)
 
-            elif opponent.content_type == 'herbivorous':
+            elif opponent.content_type == Feedings.HERBIVOROUS.value:
                 if self.attack(1.3) < opponent.attack():
                     if self.debug:
                         print('Defender wins! '+str(self) + ' dies!')
@@ -220,8 +202,8 @@ class Animal(Content):
                         print('Defender '+str(opponent) + ' flee!')
                     if opponent.flee(board):
                         self.move_to(opponent.pos, board)
-        elif self.content_type == 'herbivorous':
-            if opponent.content_type == 'carnivorous' or opponent.content_type == 'omnivorous':
+        elif self.content_type == Feedings.HERBIVOROUS.value:
+            if opponent.content_type == Feedings.CARNIVOROUS.value or opponent.content_type == Feedings.OMNIVOROUS.value:
                 if self.attack() < opponent.attack(1.15):
                     if self.debug:
                         print('Defender wins! '+str(self) + ' dies!')
@@ -237,14 +219,14 @@ class Animal(Content):
                     if opponent.flee(board):
                         self.move_to(opponent.pos, board)
 
-            elif opponent.content_type == 'herbivorous':
+            elif opponent.content_type == Feedings.HERBIVOROUS.value:
                 if self.attack() > opponent.attack():
                     if self.debug:
                         print('Defender '+str(opponent) + ' flee!')
                     if opponent.flee(board):
                         self.move_to(opponent.pos, board)
-        elif self.content_type == 'omnivorous':
-            if opponent.content_type == 'carnivorous' or opponent.content_type == 'omnivorous':
+        elif self.content_type == Feedings.OMNIVOROUS.value:
+            if opponent.content_type == Feedings.CARNIVOROUS.value or opponent.content_type == Feedings.OMNIVOROUS.value:
                 if self.attack() < opponent.attack():
                     if self.debug:
                         print('Defender wins! '+str(self) + ' dies!')
@@ -255,7 +237,7 @@ class Animal(Content):
                     opponent.die(board)
                     self.move_to(opponent.pos, board)
 
-            elif opponent.content_type == 'herbivorous':
+            elif opponent.content_type == Feedings.HERBIVOROUS.value:
                 if self.attack(1.15) < opponent.attack():
                     if self.debug:
                         print('Defender wins! '+str(self) + ' dies!')
@@ -302,5 +284,5 @@ class Animal(Content):
         return str(self.__class__) + ' | ' + str(self)
 
     def __str__(self):
-        return 'pos: ' + str(self.pos)+' | content_type: ' + str(self.content_type)+' | gender: ' + str(self.gender)+' | race: ' + str(self.race)+' | color: ' + str(self.color)+' | size: ' + str(self.size)
+        return 'pos: ' + str(self.pos)+' | content_type: ' + str(self.content_type)+' | gender: ' + str(self.gender)+' | race: ' + str(self.race)+' | color: ' + str(self.color) + ' | size: ' + str(self.size) + (' | father: ' + str(self.father.race) + '(' + str(self.father.size) + ') | mother: ' + str(self.mother.race) + '(' + str(self.father.size) + ')') if self.father else ''
         # return str(self)

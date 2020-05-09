@@ -42,7 +42,7 @@ class Cell:
         # pygame.draw.rect(board.screen, self.WHITE, cell)
 
         if not self.empty():
-            self.content.draw(board)
+            self.content.draw_image(board)
             # self.content.draw_debug_text(board, some_text)
 
     def debug(self):

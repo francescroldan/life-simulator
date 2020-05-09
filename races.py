@@ -1,5 +1,6 @@
 import random
 from enum import Enum
+from feedings import Feedings
 
 
 class Races(Enum):
@@ -93,11 +94,11 @@ class Races(Enum):
                   )
 
     def random_by_feeds(self, feed: str):
-        if feed == 'carnivorous':
+        if feed == Feedings.CARNIVOROUS.value:
             return self.random_carnivorous(self)
-        elif feed == 'herbivorous':
+        elif feed == Feedings.HERBIVOROUS.value:
             return self.random_herbivorous(self)
-        elif feed == 'omnivorous':
+        elif feed == Feedings.OMNIVOROUS.value:
             return self.random_omnivorous(self)
         else:
             raise Exception('Feed "' + feed + '" is not valid value')
