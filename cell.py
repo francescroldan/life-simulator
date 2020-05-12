@@ -43,8 +43,23 @@ class Cell:
 
         if not self.empty():
             self.content.draw_image(board)
-            # self.content.draw_debug_text(board, some_text)
+        self.draw_cell_text(board, str(self.pos))
+        # self.content.draw_debug_text(board, some_text)
+
+    def draw_cell_text(self, board, text: str, cell_x: int = 1, cell_y: int = 1):
+        if not board.visual:
+            return
+        cell = board.cell(self.pos)
+        x, y = cell.x * board.block_width, cell.y * board.block_height
+        font = pygame.font.SysFont('verdana', 8)
+        text = font.render(text, True, (0, 0, 0))
+        board.screen.blit(
+            text, (x + cell_x, y + cell_y))
+        # pygame.display.update()
 
     def debug(self):
-        print('Cell | pos: ' + str(self.pos) + ' | x: ' + str(self.x) + ' | y: ' + str(self.y) + ' | ' +
-              (' empty' if self.empty() else ' => ' + str(self.content)))
+        content = ' empty'
+        if not self.empty():
+            content = ' => ' + str(self.content)
+        print('Cell | pos: ' + str(self.pos) + ' | x: ' +
+              str(self.x) + ' | y: ' + str(self.y) + ' | ' + content)

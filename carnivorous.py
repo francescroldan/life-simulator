@@ -26,6 +26,27 @@ class Carnivorous(Animal):
         super().__init__(
             pos, self.content_type, race, self.color, size, self.gender, father, mother)
 
+    def execute(self, pos: int, board):
+        cell = board.cells[pos]
+        # No ask, just do it(Tell, don't ask)
+        if cell.empty():
+            if self.debug:
+                print('Content ' + str(self.pos) + ' moves to ' + str(pos))
+            self.move_to(pos, board)
+            return 1
+        if self.can_reproduce(cell.content):
+            if self.gender == Genders.FEMALE.value:
+                self.reproduce(cell.content, board)
+                return 3
+            else:
+                cell.content.reproduce(self, board)
+            return 1
+
+        self.fight(cell.content, board)
+        cell.food_quality = 1
+        self.feed(int(cell.content.size/(7+(10*self.size/100))))
+        return 2
+
     def evaluate(self, option_cells: list):
         evaluation = {}
         for cell in option_cells:
@@ -81,13 +102,13 @@ class Carnivorous(Animal):
                 opponent.die(board)
                 self.move_to(opponent.pos, board)
 
-    def reproduce(self, other, board):
-        data = super().reproduce(other, board)
-        if not data:
-            return
-        data["empty_cell"].occupy(Carnivorous(
-            data["empty_cell"].pos, data["father"].race, data["color"], data["size"], None, data["father"], data["mother"]))
+    # def reproduce(self, other, board):
+    #     data = super().reproduce(other, board)
+    #     if not data:
+    #         return
+    #     data["empty_cell"].occupy(Carnivorous(
+    #         data["empty_cell"].pos, data["father"].race, data["color"], data["size"], None, data["father"], data["mother"]))
 
-        if self.debug:
-            print('New ' + data["father"].race.capitalize() +
-                  ' born: ' + str(data["empty_cell"].content))
+    #     if self.debug:
+    #         print('New ' + data["father"].race.capitalize() +
+    #               ' born: ' + str(data["empty_cell"].content))

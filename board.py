@@ -63,6 +63,7 @@ class Board:
     def draw_cells(self):
         for pos in self.cells:
             self.cells[pos].draw(self)
+        pygame.display.update()
 
     def cell(self, pos: int):
         return self.cells[pos]
@@ -76,11 +77,9 @@ class Board:
     def adjacent_positions(self, pos: int, distance: int):
         matrix = []
         for width in range(0, 2*distance+1):
-            # print('width: ' + str(width))
             line = []
             for y in range(pos - (self.cols*(distance-width))-distance, pos - (self.cols*(distance-width)) +
                            distance+1):
-                # print('y: ' + str(y))
                 if y >= 0 and y < len(self.cells) and y != pos:
                     line.append(y)
             matrix += line

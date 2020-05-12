@@ -7,6 +7,7 @@ from board import Board
 from content import Content
 from animalData import AnimalData
 from animalFactory import AnimalFactory
+from races import Races
 
 pygame.init()
 pygame.display.set_caption("Francesc's Game of Life")
@@ -14,8 +15,10 @@ paused = False
 count = 0
 
 
-def generate_random_animals(quantity: int):
+def generate_random_animals(quantity: int, races: list = []):
     print('Creating ' + str(quantity) + ' random animals')
+    if not races:
+        races = Races.random_list(Races, 6)
     empty_cells = board.empty_cells()
     random.shuffle(empty_cells)
     for i in range(quantity):
@@ -26,8 +29,10 @@ def generate_random_animals(quantity: int):
         while not created:
             cell = empty_cells.pop()
             if cell.empty():
+                race = random.choice(races)
+                print(race)
                 animal = AnimalFactory.generate_random(
-                    AnimalFactory, cell.pos)
+                    AnimalFactory, cell.pos, race)
                 cell.occupy(animal)
                 if False:
                     print(animal.race + ' -> ' + str(animal.size))
@@ -41,24 +46,11 @@ def step():
     board.draw_grid()
     print('step ' + str(count))
     filled = board.filled_cells()
-    if len(filled) < 2:
-        print('Game is ended!')
-        print(str(filled[0].content) + ' wins!')
-        pygame.quit()
-        sys.exit()
     for cell in filled:
-        # if(cell.empty()):
-        #     not_empty = []
-        #     for pos in filled:
-        #         not_empty.append(pos.pos)
-        #     print(not_empty)
-        #     board.debug()
-        #     print('Error!!! ' + str(cell.pos) +
-        #           ' is empty and does not will be')
-        #     pygame.quit()
-        #     sys.exit()
         if not cell.empty() and cell.content.actions > 0:
             cell.content.action(board)
+
+    board.draw_cells()
 
     filled = board.filled_cells()
     for cell in filled:
@@ -68,16 +60,18 @@ def step():
 def click_at(point):
     x, y = point
     block_x, block_y = x // cell_w, y // cell_h
-    print(board.cell_by_coords(block_x, block_y).debug())
+    board.cell_by_coords(block_x, block_y).debug()
 
 
-cols = 10
-rows = 10
-cell_w = 50
-cell_h = 50
-board = Board(cols, rows, cell_w, cell_h)
-# generate_random_animals(random.randint(int(cols/2), int(cols*2)))
-generate_random_animals(int(cols*rows/1.5))
+visual = False
+cols = 5*20
+rows = 5*20
+cell_w = 10
+cell_h = 10
+board = Board(cols, rows, cell_w, cell_h, visual)
+generate_random_animals(random.randint(int(cols/2), int(cols*2)))
+# generate_random_animals(int(cols*rows*0.3), ['cow', 'wolf'])
+# generate_random_animals(1)
 clock = pygame.time.Clock()
 board.draw_grid()
 board.draw_cells()
@@ -89,6 +83,7 @@ while True:
         elif event.type == pygame.KEYDOWN:
             if event.key == K_SPACE:
                 paused = not paused
+                print('PAUSED' if paused else 'RUNNING')
             elif event.key == K_ESCAPE:
                 print('End game!')
                 pygame.quit()
@@ -101,11 +96,11 @@ while True:
                 [print(i.debug()) for i in board.empty_cells()]
             elif event.key == ord("v"):
                 board.visual = not board.visual
+                print(
+                    'VISUALIZATION ENABLED' if board.visual else 'VISUALIZATION DISABLED')
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click_at(pygame.mouse.get_pos())
-            # x, y = pygame.mouse.get_pos()
-            # block_x, block_y = x // cell_w, y // cell_h
-            # board.cell_by_coords(block_x, block_y).debug()
     step()
     if not paused:
         count += 1

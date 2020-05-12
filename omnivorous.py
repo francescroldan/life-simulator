@@ -26,8 +26,27 @@ class Omnivorous(Animal):
         super().__init__(
             pos, self.content_type, race, self.color, size, self.gender, father, mother)
 
-    def reset_actions(self):
-        self.actions = self.base_actions
+    def execute(self, pos: int, board):
+        cell = board.cells[pos]
+        # No ask, just do it(Tell, don't ask)
+        if cell.empty():
+            if self.debug:
+                print('Content ' + str(self.pos) + ' moves to ' + str(pos))
+            self.move_to(pos, board)
+            cell.food_quality = 1
+            self.feed(int(self.size/cell.food_quality*(2+(10*self.size/100))))
+            return 1
+        if self.can_reproduce(cell.content):
+            if self.gender == Genders.FEMALE.value:
+                self.reproduce(cell.content, board)
+                return 3
+            else:
+                cell.content.reproduce(self, board)
+            return 1
+
+        self.fight(cell.content, board)
+        self.feed(int(cell.content.size/(4+(10*self.size/100))))
+        return 1.8
 
     def evaluate(self, option_cells: list):
         evaluation = {}
@@ -102,13 +121,13 @@ class Omnivorous(Animal):
                 if opponent.flee(board):
                     self.move_to(opponent.pos, board)
 
-    def reproduce(self, other, board):
-        data = super().reproduce(other, board)
-        if not data:
-            return
-        data["empty_cell"].occupy(Omnivorous(
-            data["empty_cell"].pos, data["father"].race, data["color"], data["size"], None, data["father"], data["mother"]))
+    # def reproduce(self, other, board):
+    #     data = super().reproduce(other, board)
+    #     if not data:
+    #         return
+    #     data["empty_cell"].occupy(Omnivorous(
+    #         data["empty_cell"].pos, data["father"].race, data["color"], data["size"], None, data["father"], data["mother"]))
 
-        if self.debug:
-            print('New ' + data["father"].race.capitalize() +
-                  ' born: ' + str(data["empty_cell"].content))
+    #     if self.debug:
+    #         print('New ' + data["father"].race.capitalize() +
+    #               ' born: ' + str(data["empty_cell"].content))

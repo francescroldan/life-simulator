@@ -6,6 +6,7 @@ from feedings import Feedings
 
 
 class AnimalData(Enum):
+    # CARNIVOROUS
     SEAL = (Feedings.CARNIVOROUS.value, 'seal',
             Sizes.M.value, Colors.RED.value)
     HYENA = (Feedings.CARNIVOROUS.value, 'hyena',
@@ -80,7 +81,7 @@ class AnimalData(Enum):
                Sizes.XS.value, Colors.RED.value)
     BADGER = (Feedings.CARNIVOROUS.value, 'badger',
               Sizes.XS.value, Colors.RED.value)
-
+    # HERBIVOROUS
     HORSE = (Feedings.HERBIVOROUS.value, 'horse',
              Sizes.L.value, Colors.GREEN.value)
     GOAT = (Feedings.HERBIVOROUS.value, 'goat',
@@ -115,7 +116,7 @@ class AnimalData(Enum):
                    Sizes.XS.value, Colors.GREEN.value)
     COW = (Feedings.HERBIVOROUS.value, 'cow',
            Sizes.L.value, Colors.GREEN.value)
-
+    # OMNIVOROUS
     DOG = (Feedings.OMNIVOROUS.value, 'dog',
            Sizes.S.value, Colors.RED.value)
     GRIZZLY = (Feedings.OMNIVOROUS.value, 'grizzly',

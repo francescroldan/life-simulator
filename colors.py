@@ -20,13 +20,13 @@ class Colors(Enum):
     def random(self):
         return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-    def similar(self, color: Tuple[int, int, int]):
+    def similar(self, color: Tuple[int, int, int], variation: int = 10):
         if color[0] is None or color[1] is None or color[2] is None:
             raise Exception('Not valid color')
-        new_color = (min(max(0, random.randint(int(color[0]-25), int(color[0]+25))), 255),
+        new_color = (min(max(0, random.randint(int(color[0] - variation), int(color[0] + variation))), 255),
                      min(max(0, random.randint(
-                         int(color[1]-25), int(color[1]+25))), 255),
-                     min(max(0, random.randint(int(color[2]-25), int(color[2]+25))), 255))
+                         int(color[1] - variation), int(color[1] + variation))), 255),
+                     min(max(0, random.randint(int(color[2] - variation), int(color[2] + variation))), 255))
         return new_color
 
     def melt(self, first: Tuple[int, int, int], second: Tuple[int, int, int]):

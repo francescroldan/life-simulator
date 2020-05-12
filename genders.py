@@ -8,3 +8,9 @@ class Genders(Enum):
 
     def random(self):
         return random.choice(list(Genders)).value
+
+    def symbol(self, gender):
+        if gender == Genders.MALE.value:
+            return '♂'
+        if gender == Genders.FEMALE.value:
+            return '♀'

@@ -1,40 +1,64 @@
-import numpy as np
-# import pygame
-# from math import pi
-# pygame.init()
+import pygame
+from pygame.locals import QUIT, KEYDOWN, K_ESCAPE, K_SPACE, SRCALPHA
 
-# screen = pygame.display.set_mode((100, 100))
-# WHITE = pygame.Color(255, 255, 255)
-# RED = pygame.Color(255, 0, 0)
 
-# size = (50, 50)
-# # The corner points of the polygon.
-# points = [(25, 0), (50, 25), (25, 50), (0, 25)]
+class Game(object):
+    def __init__(self):
+        pygame.init()
+        self.width, self.height = 800, 800
+        pygame.display.set_caption("Surfarray test")
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.background = pygame.Surface((self.width, self.height))
+        self.background.fill((255, 255, 255))
+        self.background.convert()
+        self.bar = pygame.Surface((200, 100))
+        self.bar.fill((255, 0, 0))
+        self.bar.convert()
 
-# polygon = pygame.Surface(size)
-# pygame.draw.polygon(polygon, RED, points, 10)
+        self.sprite = pygame.sprite.GroupSingle()
+        self.sprite.add(CustomSprite(pygame.Rect(5, 5, 100, 100)))
 
-# polygon_filled = pygame.Surface(size)
-# pygame.draw.polygon(polygon_filled, RED, points)
+    def input(self):
+        for event in pygame.event.get():
 
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             quit()
+            if event.type == QUIT:
+                return False
 
-#     screen.blit(polygon_filled, (25, 25))
-#     pygame.display.update()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    return False
+                if event.key == K_SPACE:
+                    # make bar transparent by pressing the space bar
+                    self.sprite.update()
 
-distTot = 2
-pos = 310
-lenght = 27
-arrResult = []
-for longitud in range(0, 2*distTot+1):
-    arr = []
-    for y in range(pos - (lenght*(distTot-longitud))-distTot, pos - (lenght*(distTot-longitud)) +
-                   distTot+1):
-        arr.append(y)
-    arrResult.append(arr)
+    def main(self):
+        while True:
+            if self.input() is False:
+                return False
+            self.draw()
 
-print(arrResult)
-print(np.array(arrResult))
+    def draw(self):
+        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.bar, (5, 5))
+        self.sprite.draw(self.screen)
+        pygame.display.update()
+
+
+class CustomSprite(pygame.sprite.Sprite):
+    def __init__(self, rect):
+        pygame.sprite.Sprite.__init__(self)
+        self.rect = rect
+        # SRCALPHA flag makes the pixel format include per-pixel alpha data
+        self.image = pygame.Surface((rect.width, rect.height), SRCALPHA)
+        self.image.convert_alpha()
+        self.image.fill((126, 126, 126))
+
+    # magic happens here
+    def update(self):
+        pxa = pygame.surfarray.pixels_alpha(self.image)
+        pxa[:] = 100  # make all pixels transparent
+
+
+if __name__ == "__main__":
+    game = Game()
+    game.main()
